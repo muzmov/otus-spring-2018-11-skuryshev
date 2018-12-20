@@ -21,10 +21,7 @@ open class Config {
     }
 
     @Bean
-    open fun defaultLocale(@Value("\${locale}") locale: String): Locale = when(locale) {
-        "en" -> Locale.ENGLISH
-        else -> Locale.getDefault()
-    }
+    open fun defaultLocale(@Value("\${locale}") locale: String): Locale = Locale.forLanguageTag(locale)
 
     @Bean
     open fun questionDao() = ClasspathCsvQuestionDao("/questions.csv")
