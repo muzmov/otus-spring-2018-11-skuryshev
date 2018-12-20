@@ -1,9 +1,9 @@
 package ru.otus.service
 
+import org.springframework.stereotype.Service
 import ru.otus.dao.QuestionsDao
-import ru.otus.reader.Reader
-import ru.otus.writer.Writer
 
+@Service
 class PollService(
     val writer: Writer,
     val reader: Reader,

@@ -5,8 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import ru.otus.dao.QuestionsDao
 import ru.otus.model.Question
-import ru.otus.reader.Reader
-import ru.otus.writer.Writer
 
 class PollServiceTest {
 

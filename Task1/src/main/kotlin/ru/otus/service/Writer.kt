@@ -1,4 +1,4 @@
-package ru.otus.writer
+package ru.otus.service
 
 interface Writer {
     fun write(s: String)
