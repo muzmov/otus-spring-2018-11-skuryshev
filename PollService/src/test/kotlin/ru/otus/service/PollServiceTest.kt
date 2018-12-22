@@ -5,8 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import ru.otus.dao.QuestionsDao
 import ru.otus.model.Question
-import ru.otus.reader.Reader
-import ru.otus.writer.Writer
 
 class PollServiceTest {
 
@@ -27,8 +25,10 @@ class PollServiceTest {
 
         pollService.doPoll()
 
-        val argumentCaptor = argumentCaptor<String>()
-        verify(writer, times(4)).write(argumentCaptor.capture())
-        assertThat(argumentCaptor.allValues).containsExactly("Please enter your name:", "question1", "question2", "name. Correct answers: 1 out of 2")
+        val argumentCaptor1 = argumentCaptor<String>()
+        val argumentCaptor2 = argumentCaptor<Array<Any>>()
+        verify(writer, times(4)).write(argumentCaptor1.capture(), argumentCaptor2.capture())
+        assertThat(argumentCaptor1.allValues).containsExactly("nameRequest", "question1", "question2", "result")
+        assertThat(argumentCaptor2.allValues).containsExactly(arrayOf(), arrayOf(), arrayOf(), arrayOf("name", 1, 2))
     }
 }
