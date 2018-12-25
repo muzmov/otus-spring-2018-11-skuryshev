@@ -13,9 +13,17 @@ class PollService(
     fun doPoll() {
         writer.write("nameRequest", arrayOf())
         val name = reader.readLine()
+        doPollInternal(name)
+    }
+
+    fun doPoll(name: String) {
+        doPollInternal(name)
+    }
+
+    private fun doPollInternal(name: String) {
         val questions = questionsDao.loadQuestions()
         var correctAnswers = 0
-        questions.forEach{
+        questions.forEach {
             writer.write(it.question, arrayOf())
             if (reader.readLine() == it.answer) correctAnswers++
         }
