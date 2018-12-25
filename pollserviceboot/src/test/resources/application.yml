@@ -1,0 +1,6 @@
+props:
+  locale: ru
+  path: /questions_test.csv
+  i18n:
+    bundle: messages
+    encoding: windows-1251

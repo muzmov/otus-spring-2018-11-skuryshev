@@ -1,0 +1,9 @@
+props:
+  locale: ru
+  path: /questions.csv
+  i18n:
+    bundle: messages
+    encoding: windows-1251
+spring:
+  banner:
+    location: classpath:banner.txt
