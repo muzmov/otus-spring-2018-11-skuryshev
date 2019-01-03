@@ -10,13 +10,14 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.shell.jline.InteractiveShellApplicationRunner
 import org.springframework.test.context.junit4.SpringRunner
 import ru.otus.pollserviceboot.service.PollService
 import ru.otus.pollserviceboot.service.Reader
 import ru.otus.pollserviceboot.service.Writer
 
 @RunWith(SpringRunner::class)
-@SpringBootTest
+@SpringBootTest(properties = [InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false"])
 class PollServiceBootApplicationTests {
 
     @MockBean
