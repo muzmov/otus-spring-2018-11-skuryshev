@@ -5,8 +5,8 @@ data class Book (
     var title: String = "",
     var description: String = ""
 ) {
-    var genres: List<Genre> = listOf()
-    var authors: List<Author> = listOf()
+    var genres: MutableSet<Genre> = mutableSetOf()
+    var authors: MutableSet<Author> = mutableSetOf()
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', description='$description', genres=$genres, authors=$authors)"
