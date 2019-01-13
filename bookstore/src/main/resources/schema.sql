@@ -31,3 +31,10 @@ create table book_genre (
   constraint bg_2_book foreign key (book_id) references book (id),
   constraint bg_2_genre foreign key (genre_id) references genre (id)
 );
+
+create table review (
+  id number(19, 0) primary key,
+  book_id number(19, 0),
+  text varchar(500 char) not null,
+  constraint rv_2_book foreign key (book_id) references book (id)
+)
