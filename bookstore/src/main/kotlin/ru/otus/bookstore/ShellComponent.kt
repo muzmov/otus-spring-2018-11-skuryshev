@@ -6,12 +6,14 @@ import org.springframework.shell.standard.ShellOption
 import ru.otus.bookstore.dao.AuthorDao
 import ru.otus.bookstore.dao.BookDao
 import ru.otus.bookstore.dao.GenreDao
+import ru.otus.bookstore.service.ReviewService
 
 @ShellComponent
 class ShellComponent(
     private val genreDao: GenreDao,
     private val authorDao: AuthorDao,
-    private val bookDao: BookDao
+    private val bookDao: BookDao,
+    private val reviewService: ReviewService
 ) {
 
     @ShellMethod("List entities")
@@ -64,4 +66,7 @@ class ShellComponent(
         "book" -> bookDao.delete(id).let { "Deleted" }
         else -> "Wrong param"
     }
+
+    @ShellMethod("Add review to book")
+    fun review(bookId: Long, text: String) = reviewService.addReview(bookId, text)
 }
