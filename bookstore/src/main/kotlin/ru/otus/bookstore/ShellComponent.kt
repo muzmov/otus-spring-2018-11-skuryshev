@@ -15,9 +15,9 @@ import ru.otus.bookstore.service.ReviewService
 @ShellComponent
 @Transactional
 class ShellComponent(
+    private val bookRepository: BookRepository,
     private val genreRepository: GenreRepository,
     private val authorRepository: AuthorRepository,
-    private val bookRepository: BookRepository,
     private val reviewService: ReviewService
 ) {
 
@@ -31,20 +31,20 @@ class ShellComponent(
 
     @ShellMethod("Add entity")
     fun add(
-        entity: String, name: String,
-        @ShellOption(defaultValue = "") description: String,
-        @ShellOption(defaultValue = "") genreIds: String,
-        @ShellOption(defaultValue = "") authorIds: String
+        entity: String, var1: String,
+        @ShellOption(defaultValue = "") var2: String,
+        @ShellOption(defaultValue = "") var3: String,
+        @ShellOption(defaultValue = "") var4: String
     ) = when (entity) {
-        "author" -> authorRepository.save(Author(name = name)).let { "id = ${it.id}" }
-        "genre" -> genreRepository.save(Genre(name = name)).let { "id = ${it.id}" }
+        "author" -> authorRepository.save(Author(firstName = var1, lastName = var2, middleName = var3)).let { "id = ${it.id}" }
+        "genre" -> genreRepository.save(Genre(name = var1, description = var2)).let { "id = ${it.id}" }
         "book" -> bookRepository.save(
             Book(
-                title = name,
-                description = description
+                title = var1,
+                description = var2
             ).apply {
-                genres = genreRepository.findAllById(genreIds.split(",").map { it.toLong() }).toMutableSet()
-                authors = authorRepository.findAllById(authorIds.split(",").map { it.toLong() }).toMutableSet()
+                genres = genreRepository.findAllById(var3.split(",")).toMutableSet()
+                authors = authorRepository.findAllById(var4.split(",")).toMutableSet()
             }
         ).let { "id = ${it.id}" }
         else -> "Wrong param"
@@ -52,24 +52,34 @@ class ShellComponent(
 
     @ShellMethod("Update entity")
     fun update(
-        entity: String, id: Long, name: String,
-        @ShellOption(defaultValue = "") description: String,
-        @ShellOption(defaultValue = "") genreIds: String,
-        @ShellOption(defaultValue = "") authorIds: String
+        entity: String, id: String, var1: String,
+        @ShellOption(defaultValue = "") var2: String,
+        @ShellOption(defaultValue = "") var3: String,
+        @ShellOption(defaultValue = "") var4: String
     ) = when (entity) {
-        "author" -> authorRepository.findById(id).ifPresent { it.name = name } .let { "Updated" }
-        "genre" -> genreRepository.findById(id).ifPresent { it.name = name } .let { "Updated" }
+        "author" -> authorRepository.findById(id).ifPresent {
+            it.firstName = var1
+            it.lastName = var2
+            it.middleName = var3
+            authorRepository.save(it)
+        } .let { "Updated" }
+        "genre" -> genreRepository.findById(id).ifPresent {
+            it.name = var1
+            it.description = var2
+            genreRepository.save(it)
+        } .let { "Updated" }
         "book" -> bookRepository.findById(id).ifPresent {
-            it.title = name
-            it.description = description
-            it.genres = genreRepository.findAllById(genreIds.split(",").map { it.toLong() }).toMutableSet()
-            it.authors = authorRepository.findAllById(authorIds.split(",").map { it.toLong() }).toMutableSet()
+            it.title = var1
+            it.description = var2
+            it.genres = genreRepository.findAllById(var3.split(",")).toMutableSet()
+            it.authors = authorRepository.findAllById(var4.split(",")).toMutableSet()
+            bookRepository.save(it)
         } .let { "Updated" }
         else -> "Wrong param"
     }
 
     @ShellMethod("Delete entity")
-    fun delete(entity: String, id: Long) = when (entity) {
+    fun delete(entity: String, id: String) = when (entity) {
         "author" -> authorRepository.deleteById(id).let { "Deleted" }
         "genre" -> genreRepository.deleteById(id).let { "Deleted" }
         "book" -> bookRepository.deleteById(id).let { "Deleted" }
@@ -77,5 +87,5 @@ class ShellComponent(
     }
 
     @ShellMethod("Add review to book")
-    fun review(bookId: Long, text: String) = reviewService.addReview(bookId, text)
+    fun review(bookId: String, text: String) = reviewService.addReview(bookId, text)
 }

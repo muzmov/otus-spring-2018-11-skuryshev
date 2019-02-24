@@ -1,12 +1,12 @@
 package ru.otus.bookstore.model
 
-import javax.persistence.*
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 
-@Entity
+@Document
 data class Genre (
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genre_seq")
-    @SequenceGenerator(name = "genre_seq", sequenceName = "genre_seq", allocationSize = 1)
-    var id: Long = 0,
-    var name: String = ""
+    var id: String? = null,
+    var name: String = "",
+    var description: String = ""
 )

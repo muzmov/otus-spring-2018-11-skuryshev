@@ -23,20 +23,20 @@ class BookRepositoryTest : AbstractDaoTest() {
 
     @Test
     fun testAddDeleteUpdateGetAll() {
-        val authors = authorRepository.saveAll(listOf(Author(name = "TEST_AUTHOR1"), Author(name = "TEST_AUTHOR2"))).toMutableSet()
+        val authors = authorRepository.saveAll(listOf(Author(firstName = "TEST_AUTHOR1"), Author(firstName = "TEST_AUTHOR2"))).toMutableSet()
         val genres = genreRepository.saveAll(listOf(Genre(name = "TEST_GENRE1"), Genre(name = "TEST_GENRE2"))).toMutableSet()
         val id1 = bookRepository.save(Book(title = "TEST_TITLE1", description = "TEST_DESCRIPTION1").also {
             it.genres = genres
             it.authors = authors
-        }).id
+        }).id!!
         val id2 = bookRepository.save(Book(title = "TEST_TITLE2", description = "TEST_DESCRIPTION2").also {
             it.genres = genres
             it.authors = authors
-        }).id
+        }).id!!
         val id3 = bookRepository.save(Book(title = "TEST_TITLE3", description = "TEST_DESCRIPTION3").also {
             it.genres = mutableSetOf()
             it.authors = mutableSetOf()
-        }).id
+        }).id!!
         bookRepository.deleteById(id2)
         bookRepository.findById(id3).ifPresent{
             it.title = "TEST_TITLE3_UPDATED"
@@ -52,8 +52,8 @@ class BookRepositoryTest : AbstractDaoTest() {
             Book(id1, "TEST_TITLE1", "TEST_DESCRIPTION1"),
             Book(id3, "TEST_TITLE3_UPDATED", "TEST_DESCRIPTION3_UPDATED")
         )
-        assertThat(books.find { it.id == id1 }?.authors).extracting<String> { it.name }.containsExactlyInAnyOrder("TEST_AUTHOR1", "TEST_AUTHOR2")
-        assertThat(books.find { it.id == id3 }?.authors).extracting<String> { it.name }.containsExactlyInAnyOrder("TEST_AUTHOR1", "TEST_AUTHOR2")
+        assertThat(books.find { it.id == id1 }?.authors).extracting<String> { it.firstName }.containsExactlyInAnyOrder("TEST_AUTHOR1", "TEST_AUTHOR2")
+        assertThat(books.find { it.id == id3 }?.authors).extracting<String> { it.firstName }.containsExactlyInAnyOrder("TEST_AUTHOR1", "TEST_AUTHOR2")
 
         assertThat(books.find { it.id == id1 }?.genres).extracting<String> { it.name }.containsExactlyInAnyOrder("TEST_GENRE1", "TEST_GENRE2")
         assertThat(books.find { it.id == id3 }?.genres).extracting<String> { it.name }.containsExactlyInAnyOrder("TEST_GENRE1", "TEST_GENRE2")
