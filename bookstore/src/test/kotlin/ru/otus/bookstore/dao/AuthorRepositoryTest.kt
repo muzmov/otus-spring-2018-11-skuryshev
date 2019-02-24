@@ -11,17 +11,17 @@ class AuthorRepositoryTest: AbstractDaoTest() {
 
     @Test
     fun testAddDeleteUpdateGetAll() {
-        val id1 = authorRepository.save(Author(name = "TEST_NAME1")).id
-        val id2 = authorRepository.save(Author(name = "TEST_NAME2")).id
-        val id3 = authorRepository.save(Author(name = "TEST_NAME3")).id
+        val id1 = authorRepository.save(Author(firstName = "TEST_NAME1")).id!!
+        val id2 = authorRepository.save(Author(firstName = "TEST_NAME2")).id!!
+        val id3 = authorRepository.save(Author(firstName = "TEST_NAME3")).id!!
         authorRepository.deleteById(id2)
         authorRepository.findById(id3).ifPresent {
-            it.name = "TEST_NAME3_UPDATED"
+            it.firstName = "TEST_NAME3_UPDATED"
             authorRepository.save(it)
         }
         val authors = authorRepository.findAll()
         assertThat(authors).containsExactlyInAnyOrder(
-            Author(id = id1, name = "TEST_NAME1"),
-            Author(id = id3, name = "TEST_NAME3_UPDATED"))
+            Author(id = id1, firstName = "TEST_NAME1"),
+            Author(id = id3, firstName = "TEST_NAME3_UPDATED"))
     }
 }
