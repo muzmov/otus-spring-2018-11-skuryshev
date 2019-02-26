@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список жанров</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Жанры:</h1>
+
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="genre : ${genres}">
+        <td th:text="${genre.id}">1</td>
+        <td th:text="${genre.name}">John</td>
+        <td th:text="${genre.description}">Doe</td>
+        <td>
+            <a th:href="@{'/genre/' + ${genre.id}}" href="genre.html">Редактировать</a><br>
+            <a th:href="@{'/delete-genre/' + ${genre.id}}" href="author.html">Удалить</a><br>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/genre}" href = "genre.html">Добавить жанр</a>
+</body>
+</html>
