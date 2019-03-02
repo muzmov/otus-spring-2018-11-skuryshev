@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список авторов</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .authors, .authors td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Авторы:</h1>
+
+<table class="authors">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Отчество</th>
+        <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author : ${authors}">
+        <td th:text="${author.id}">1</td>
+        <td th:text="${author.firstName}">John</td>
+        <td th:text="${author.lastName}">Doe</td>
+        <td th:text="${author.middleName}">Doevich</td>
+        <td>
+            <a th:href="@{'/author/' + ${author.id}}" href="author.html">Редактировать</a><br>
+            <a th:href="@{'/delete-author/' + ${author.id}}" href="author.html">Удалить</a><br>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:href="@{/author}" href = "author.html">Добавить автора</a>
+</body>
+</html>

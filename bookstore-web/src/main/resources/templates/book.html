@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit person</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Person edition -->
+<form id="edit-form" th:action="@{/book}" th:object="${book}" th:method="post" action="author.html">
+    <h1>Редактировать книгу:</h1>
+
+    <div class="row">
+        <label for="id-input">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" th:field="*{id}" value="1"/>
+    </div>
+
+    <div class="row">
+        <label for="holder-input-var1">Название:</label>
+        <input id="holder-input-var1" name="firstName" type="text" th:field="*{title}" value="Название"/>
+    </div>
+
+    <div class="row">
+        <label for="holder-input-var2">Описание:</label>
+        <input id="holder-input-var2" name="lastName" type="text" th:field="*{description}" value="Описание"/>
+    </div>
+
+    <div class="row">
+        <label for="holder-input-var3">Жанры:</label>
+        <input id="holder-input-var3" name="middleName" type="text" th:field="*{genreIds}" value="1, 2, 3"/>
+    </div>
+
+    <div class="row">
+        <label for="holder-input-var4">Авторы:</label>
+        <input id="holder-input-var4" name="middleName" type="text" th:field="*{authorIds}" value="1, 2, 3"/>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+</body>
+</html>
