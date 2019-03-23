@@ -22,18 +22,17 @@ class MainController(
     }
 
     @PostMapping("/author")
-    fun updateAuthor(@RequestBody author: Author): String {
-        if (author.id?.isBlank()!!) {
-            authorRepository.save(author.copy(id = null))
-        } else {
-            authorRepository.save(author)
-        }
-        return """{"status": "success"}"""
-    }
+    fun updateAuthor(@RequestBody author: Author) = authorRepository.save(author).let { Status.SUCCESS }
+
+    @PutMapping("/author")
+    fun createAuthor(@RequestBody author: Author) = authorRepository.save(author.copy(id = null)).let { Status.SUCCESS }
 
     @DeleteMapping("/author/{id}")
-    fun deleteAuthor(@PathVariable id: String): String {
-        authorRepository.deleteById(id)
-        return """{"status": "success"}"""
+    fun deleteAuthor(@PathVariable id: String) = authorRepository.deleteById(id).let { Status.SUCCESS }
+}
+
+data class Status(val status: String) {
+    companion object {
+        val SUCCESS = Status("success")
     }
 }

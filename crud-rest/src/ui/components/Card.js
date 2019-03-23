@@ -1,77 +1,5 @@
 import React, {Component} from 'react'
 
-class Authors extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            list: [],
-            selected: null
-        }
-    }
-
-    componentDidMount() {
-        this.refresh()
-    }
-
-    refresh() {
-        fetch('/authors')
-            .then(response => response.json())
-            .then(authors => this.setState({list: authors, selected: null}));
-    }
-
-    selectHandler(id) {
-        this.setState({selected: id})
-    }
-
-    render() {
-        const selectedEntity = this.state.list.find(it => it.id === this.state.selected)
-        return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-sm">
-                        <List list={this.state.list} selectHandler={this.selectHandler.bind(this)}/>
-                        <button className="btn btn-primary"
-                                onClick={() => this.selectHandler(null)}>New</button>
-                    </div>
-                    <div className="col-sm">
-                        <Card entity={selectedEntity} refreshHandler={this.refresh.bind(this)}/>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-const List = (props) => (
-    <table className="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
-            <th scope="col">Middle Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {props.list.map(it =>
-            <Row entity={it} clickHandler={() => props.selectHandler(it.id)}/>
-        )}
-        </tbody>
-    </table>
-)
-
-const Row = (props) => {
-    return (
-        <tr onClick={props.clickHandler}>
-            <th scope="row">{props.entity.id}</th>
-            <td>{props.entity.firstName}</td>
-            <td>{props.entity.lastName}</td>
-            <td>{props.entity.middleName}</td>
-        </tr>
-    )
-}
-
 class Card extends Component {
 
     constructor(props) {
@@ -119,7 +47,7 @@ class Card extends Component {
 
     handleSubmit() {
         fetch('/author', {
-            method: 'post',
+            method: this.state.id ? 'POST' : 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
@@ -130,7 +58,7 @@ class Card extends Component {
 
     handleDelete() {
         fetch('/author/' + this.state.id, {
-            method: 'delete',
+            method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
@@ -181,4 +109,4 @@ class Card extends Component {
     }
 }
 
-export default Authors
+export default Card
