@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class SecurityConfiguration: WebSecurityConfigurerAdapter() {
 
     @Autowired
-    @Qualifier("mongoUserDetailsService")
+    @Qualifier("dbUserDetailsService")
     lateinit var userDetailsService: UserDetailsService
 
     override fun configure(http: HttpSecurity) {

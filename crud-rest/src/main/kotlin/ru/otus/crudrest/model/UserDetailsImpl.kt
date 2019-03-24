@@ -4,7 +4,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(val user: User): UserDetails {
-    override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority("user"))
+    override fun getAuthorities() = user.roles.map { SimpleGrantedAuthority(it.role) }.toMutableList()
 
     override fun isEnabled() = true
 

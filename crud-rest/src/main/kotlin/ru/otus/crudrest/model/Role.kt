@@ -6,11 +6,9 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-data class Author(
+data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    var firstName: String = "",
-    var lastName: String = "",
-    var middleName: String = ""
+    var role: String = ""
 )

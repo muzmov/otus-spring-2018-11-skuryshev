@@ -2,10 +2,10 @@ package ru.otus.crudrest
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication
-@EnableMongoRepositories
+@EnableJpaRepositories
 class CrudRestApplication
 
 fun main(args: Array<String>) {
