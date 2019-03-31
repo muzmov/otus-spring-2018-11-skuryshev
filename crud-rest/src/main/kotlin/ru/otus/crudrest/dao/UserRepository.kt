@@ -1,10 +1,10 @@
 package ru.otus.crudrest.dao
 
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import ru.otus.crudrest.model.User
 
 @Repository
-interface UserRepository: MongoRepository<User, String> {
+interface UserRepository: CrudRepository<User, Long> {
     fun findByUsername(username: String): User?
 }
