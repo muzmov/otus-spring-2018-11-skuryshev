@@ -1,5 +1,6 @@
 package ru.otus.bookstoreweb.controller
 
+import io.micrometer.core.instrument.Metrics
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,6 +21,8 @@ class MainController(
     val authorRepository: AuthorRepository,
     val genreRepository: GenreRepository
 ) {
+
+    private val bookRequestCounter = Metrics.counter("book.request")
 
     @GetMapping("/authors")
     fun authors(model: Model): String {
@@ -82,8 +85,9 @@ class MainController(
     }
 
     @GetMapping("/book/{id}", "/book")
-    fun editBook(model: Model, @PathVariable id: String?): String {
+    fun getBook(model: Model, @PathVariable id: String?): String {
         val book = if (id != null) {
+            bookRequestCounter.increment()
             bookRepository.findById(id).orElseThrow { NotFoundException("book not found") }
         } else {
             Book()
