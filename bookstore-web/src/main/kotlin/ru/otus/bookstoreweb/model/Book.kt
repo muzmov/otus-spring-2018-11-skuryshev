@@ -18,7 +18,7 @@ data class Book(
     var authors: MutableSet<Author> = mutableSetOf()
 
     fun genreNames() = genres.joinToString {it.name }
-    fun authorsFio() = authors.joinToString { "${it.firstName.first()}. ${it.middleName.first()}. ${it.lastName}"  }
+    fun authorsFio() = authors.joinToString { "${it.firstName.firstOrNull() ?: ""}. ${it.middleName.firstOrNull() ?: ""}. ${it.lastName}"  }
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', description='$description', genres=$genres, authors=$authors)"
