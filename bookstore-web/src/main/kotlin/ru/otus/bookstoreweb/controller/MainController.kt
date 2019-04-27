@@ -14,38 +14,41 @@ import ru.otus.bookstoreweb.model.Author
 import ru.otus.bookstoreweb.model.Book
 import ru.otus.bookstoreweb.model.BookDto
 import ru.otus.bookstoreweb.model.Genre
+import ru.otus.bookstoreweb.service.AuthorService
+import ru.otus.bookstoreweb.service.BookService
+import ru.otus.bookstoreweb.service.GenreService
 
 @Controller
 class MainController(
-    val bookRepository: BookRepository,
-    val authorRepository: AuthorRepository,
-    val genreRepository: GenreRepository
+    val bookService: BookService,
+    val authorService: AuthorService,
+    val genreService: GenreService
 ) {
 
     private val bookRequestCounter = Metrics.counter("book.request")
 
     @GetMapping("/authors")
     fun authors(model: Model): String {
-        model.addAttribute("authors", authorRepository.findAll())
+        model.addAttribute("authors", authorService.findAll())
         return "authors"
     }
 
     @GetMapping("/genres")
     fun genres(model: Model): String {
-        model.addAttribute("genres", genreRepository.findAll())
+        model.addAttribute("genres", genreService.findAll())
         return "genres"
     }
 
     @GetMapping("/books")
     fun books(model: Model): String {
-        model.addAttribute("books", bookRepository.findAll())
+        model.addAttribute("books", bookService.findAll())
         return "books"
     }
 
     @GetMapping("/author/{id}", "/author")
     fun editAuthor(model: Model, @PathVariable id: String?): String {
         val author = if (id != null) {
-            authorRepository.findById(id).orElseThrow { NotFoundException("author not found") }
+            authorService.findById(id).orElseThrow { NotFoundException("author not found") }
         } else {
             Author()
         }
@@ -56,9 +59,9 @@ class MainController(
     @PostMapping("/author")
     fun updateAuthor(author: Author): String {
         if (author.id?.isBlank()!!) {
-            authorRepository.save(author.copy(id = null))
+            authorService.save(author.copy(id = null))
         } else {
-            authorRepository.save(author)
+            authorService.save(author)
         }
         return "redirect:/authors"
     }
@@ -66,7 +69,7 @@ class MainController(
     @GetMapping("/genre/{id}", "/genre")
     fun editGenre(model: Model, @PathVariable id: String?): String {
         val genre = if (id != null) {
-            genreRepository.findById(id).orElseThrow { NotFoundException("genre not found") }
+            genreService.findById(id).orElseThrow { NotFoundException("genre not found") }
         } else {
             Genre()
         }
@@ -77,9 +80,9 @@ class MainController(
     @PostMapping("/genre")
     fun updateGenre(genre: Genre): String {
         if (genre.id?.isBlank()!!) {
-            genreRepository.save(genre.copy(id = null))
+            genreService.save(genre.copy(id = null))
         } else {
-            genreRepository.save(genre)
+            genreService.save(genre)
         }
         return "redirect:/genres"
     }
@@ -88,7 +91,7 @@ class MainController(
     fun getBook(model: Model, @PathVariable id: String?): String {
         val book = if (id != null) {
             bookRequestCounter.increment()
-            bookRepository.findById(id).orElseThrow { NotFoundException("book not found") }
+            bookService.findById(id).orElseThrow { NotFoundException("book not found") }
         } else {
             Book()
         }
@@ -100,10 +103,10 @@ class MainController(
     fun updateBook(book: BookDto): String {
         val id = if (book.id?.isBlank()!!) null else book.id
         val authors = book.authorIds.split(",").filter { !it.isBlank() }
-            .map { authorRepository.findById(it.trim()).orElseThrow { NotFoundException("author not found") } }
+            .map { authorService.findById(it.trim()).orElseThrow { NotFoundException("author not found") } }
         val genres = book.genreIds.split(",").filter { !it.isBlank() }
-            .map { genreRepository.findById(it.trim()).orElseThrow { NotFoundException("genre not found") } }
-        bookRepository.save(Book(id = id, title = book.title, description = book.description).also {
+            .map { genreService.findById(it.trim()).orElseThrow { NotFoundException("genre not found") } }
+        bookService.save(Book(id = id, title = book.title, description = book.description).also {
             it.authors = authors.toMutableSet()
             it.genres = genres.toMutableSet()
         })
@@ -112,19 +115,19 @@ class MainController(
 
     @GetMapping("/delete-author/{id}")
     fun deleteAuthor(@PathVariable id: String): String {
-        authorRepository.deleteById(id)
+        authorService.deleteById(id)
         return "redirect:/authors"
     }
 
     @GetMapping("/delete-genre/{id}")
     fun deleteGenre(@PathVariable id: String): String {
-        genreRepository.deleteById(id)
+        genreService.deleteById(id)
         return "redirect:/genres"
     }
 
     @GetMapping("/delete-book/{id}")
     fun deleteBook(@PathVariable id: String): String {
-        bookRepository.deleteById(id)
+        bookService.deleteById(id)
         return "redirect:/books"
     }
 
