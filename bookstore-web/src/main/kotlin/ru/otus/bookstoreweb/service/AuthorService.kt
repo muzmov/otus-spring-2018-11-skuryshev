@@ -13,10 +13,10 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     fun deleteById(id: String) = authorRepository.deleteById(id)
 
     @HystrixCommand(commandKey = "dbUpdate", fallbackMethod = "fallbackSave")
-    fun findById(id: String) = authorRepository.findById(id)
+    fun save(author: Author) = authorRepository.save(author)
 
     @HystrixCommand(commandKey = "dbRead", fallbackMethod = "fallbackFindById")
-    fun save(author: Author) = authorRepository.save(author)
+    fun findById(id: String) = authorRepository.findById(id)
 
     @HystrixCommand(commandKey = "dbRead", fallbackMethod = "fallbackFindAll")
     fun findAll() = authorRepository.findAll()
